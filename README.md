@@ -1,36 +1,140 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Product Requirements Document (PRD)
 
-## Getting Started
+Product Name: Afrimetrics
 
-First, run the development server:
+Prepared By: Micah Erumaka
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Date: June 10, 2025
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Product Summary
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Afrimetrics is a web and mobile-first application designed to help Africans track the performance of different African stock markets with a modern, visual, and research-oriented experience. Inspired by platforms like AFX (afx.kwayisi.org) and Stockbubbles.ng, Afrimetrics aims to deliver real-time stock market performance data in a way that is insightful, accessible, and interactive.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Problem Statement
 
-## Learn More
+African retail investors and finance content creators face the following issues:
 
-To learn more about Next.js, take a look at the following resources:
+Disconnected and outdated stock data from exchanges.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Lack of visual performance tools for identifying market trends.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Difficulty in discovering top-performing stocks on a weekly or monthly basis.
 
-## Deploy on Vercel
+Limited research tools tailored to African stock markets.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Afrimetrics solves these by providing a centralized, user-friendly dashboard with performance analytics, visuals, and simple tools for investors and creators.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Goals & Objectives
+
+Consolidate and visualize stock performance data from major African stock exchanges.
+
+Provide research-friendly tools like weekly/monthly performance tracking and sector heatmaps.
+
+Deliver a clean, mobile-first experience that appeals to both retail investors and content creators.
+
+Lay the groundwork for future expansion into APIs, screeners, alerts, and premium insights.
+
+4. Key Features (MVP)
+
+4.1 Stock Market Dashboard
+
+Overview of daily, weekly, and monthly performance.
+
+Tabs or filters for: Top Gainers, Top Losers, Most Active, and Sector View.
+
+Exchanges supported:
+
+Nigeria (NGX), Ghana (GSE), South Africa (JSE), Kenya (NSE)
+
+4.2 Stock Visualizations
+
+Bubble charts for weekly/monthly gainers and losers (inspired by Stockbubbles.ng).
+
+Line/bar charts for individual stock performance.
+
+Heatmap view by sector performance.
+
+4.3 Stock Profiles
+
+Individual stock detail page with:
+
+Historical price chart (daily, weekly, monthly)
+
+Company profile summary
+
+Key metrics (Market Cap, PE ratio, EPS, Dividend Yield)
+
+4.4 Watchlist (Basic)
+
+Allow users to add stocks to a simple watchlist.
+
+Show quick view of performance for each item.
+
+4.5 Responsive Design
+
+Fully optimized for mobile.
+
+Clean and modern dashboard UI with intuitive navigation.
+
+5. Future Features (Post-MVP)
+
+User login and personalization.
+
+Push/email alerts for stock price movement.
+
+API for developers and creators.
+
+Advanced stock screener with filters.
+
+News and events integration.
+
+Educational tooltips and explainer modals.
+
+6. Non-Functional Requirements
+
+Uptime target: 99.5%
+
+Response time: < 1s for dashboard load.
+
+Mobile-first design using modern front-end frameworks.
+
+Secure backend with scalable architecture (Node.js + PostgreSQL recommended).
+
+7. Tech Stack (Recommended)
+
+Frontend: React / Next.js, TailwindCSS, Charting with Recharts or D3.js
+
+Backend: Node.js with Express, PostgreSQL (or Supabase), Web scraping tools (Playwright or Puppeteer)
+
+Deployment: Vercel (frontend), Render/Fly.io/Heroku (backend)
+
+Data Storage: Daily cache of exchange prices (scraped or integrated via APIs)
+
+8. Stakeholders
+
+Product Owner: Micah Erumaka
+
+Developers: TBD
+
+End Users: African retail investors, finance content creators, fintech developers
+
+9. Success Metrics
+
+MVP launch within 6–8 weeks.
+
+1,000+ users within first 3 months.
+
+Daily returning users >= 100 after 1st month.
+
+80% mobile usage satisfaction based on in-app feedback.
+
+10. Appendix
+
+Inspiration: afx.kwayisi.org, stockbubbles.ng
+
+Target devices: Mobile (primary), Desktop (secondary)
+
+Content integration: Tie into YouTube/LinkedIn content
+
+End of PRD
+

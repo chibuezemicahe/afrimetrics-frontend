@@ -1,0 +1,205 @@
+import { MarketData, MarketIndex, MarketNews, MarketType, Stock } from "../types/stock";
+
+export const MARKETS = [
+  { id: "ALL", name: "All African Markets" },
+  { id: "NGX", name: "NGX" },
+  { id: "GSE", name: "GSE" },
+  { id: "JSE", name: "JSE" },
+];
+
+// Mock data for market indices
+export const MARKET_INDICES: MarketIndex[] = [
+  {
+    id: "ngx-asi",
+    name: "NGX ASI",
+    value: 65432.18,
+    change: 234.56,
+    percentChange: 0.36,
+    market: "NGX",
+  },
+  {
+    id: "gse-ci",
+    name: "GSE CI",
+    value: 2876.45,
+    change: -12.34,
+    percentChange: -0.43,
+    market: "GSE",
+  },
+  {
+    id: "jse-alsi",
+    name: "JSE ALSI",
+    value: 78965.32,
+    change: 543.21,
+    percentChange: 0.69,
+    market: "JSE",
+  },
+];
+
+// Mock data for market snapshots
+export const MARKET_DATA: Record<string, MarketData> = {
+  NGX: {
+    index: MARKET_INDICES[0],
+    totalVolume: 234567890,
+    valueTraded: 1234567890,
+    advancing: 23,
+    declining: 17,
+    marketCap: 12345678901234,
+    historicalData: [
+      { date: "2023-06-01", value: 64500.12 },
+      { date: "2023-06-02", value: 64700.45 },
+      { date: "2023-06-03", value: 64900.78 },
+      { date: "2023-06-04", value: 65100.34 },
+      { date: "2023-06-05", value: 65432.18 },
+    ],
+  },
+  GSE: {
+    index: MARKET_INDICES[1],
+    totalVolume: 123456789,
+    valueTraded: 987654321,
+    advancing: 12,
+    declining: 15,
+    marketCap: 5678901234567,
+    historicalData: [
+      { date: "2023-06-01", value: 2900.12 },
+      { date: "2023-06-02", value: 2890.45 },
+      { date: "2023-06-03", value: 2885.78 },
+      { date: "2023-06-04", value: 2880.34 },
+      { date: "2023-06-05", value: 2876.45 },
+    ],
+  },
+  JSE: {
+    index: MARKET_INDICES[2],
+    totalVolume: 345678901,
+    valueTraded: 2345678901,
+    advancing: 35,
+    declining: 25,
+    marketCap: 23456789012345,
+    historicalData: [
+      { date: "2023-06-01", value: 78000.12 },
+      { date: "2023-06-02", value: 78200.45 },
+      { date: "2023-06-03", value: 78400.78 },
+      { date: "2023-06-04", value: 78700.34 },
+      { date: "2023-06-05", value: 78965.32 },
+    ],
+  },
+};
+
+// Mock data for top stocks
+export const TOP_STOCKS: Stock[] = [
+  {
+    id: "ngx-dangcem",
+    name: "Dangote Cement",
+    symbol: "DANGCEM",
+    price: 280.50,
+    change: 12.50,
+    percentChange: 4.66,
+    volume: 1234567,
+    sector: "Industrial",
+    market: "NGX",
+  },
+  {
+    id: "ngx-mtnn",
+    name: "MTN Nigeria",
+    symbol: "MTNN",
+    price: 178.20,
+    change: 5.30,
+    percentChange: 3.06,
+    volume: 987654,
+    sector: "Telecommunications",
+    market: "NGX",
+  },
+  {
+    id: "gse-ggbl",
+    name: "Guinness Ghana",
+    symbol: "GGBL",
+    price: 1.85,
+    change: -0.15,
+    percentChange: -7.50,
+    volume: 456789,
+    sector: "Consumer Goods",
+    market: "GSE",
+  },
+  {
+    id: "jse-nas",
+    name: "Naspers",
+    symbol: "NPN",
+    price: 3250.75,
+    change: 125.25,
+    percentChange: 4.01,
+    volume: 345678,
+    sector: "Technology",
+    market: "JSE",
+  },
+  {
+    id: "ngx-zenithbank",
+    name: "Zenith Bank",
+    symbol: "ZENITHBANK",
+    price: 24.85,
+    change: 0.85,
+    percentChange: 3.54,
+    volume: 2345678,
+    sector: "Financial Services",
+    market: "NGX",
+  },
+  {
+    id: "jse-sas",
+    name: "Sasol",
+    symbol: "SOL",
+    price: 278.50,
+    change: -12.30,
+    percentChange: -4.23,
+    volume: 234567,
+    sector: "Energy",
+    market: "JSE",
+  },
+  {
+    id: "gse-sogegh",
+    name: "Societe Generale Ghana",
+    symbol: "SOGEGH",
+    price: 0.95,
+    change: 0.05,
+    percentChange: 5.56,
+    volume: 345678,
+    sector: "Financial Services",
+    market: "GSE",
+  },
+  {
+    id: "ngx-nestle",
+    name: "Nestle Nigeria",
+    symbol: "NESTLE",
+    price: 1050.00,
+    change: -25.50,
+    percentChange: -2.37,
+    volume: 123456,
+    sector: "Consumer Goods",
+    market: "NGX",
+  },
+];
+
+// Mock data for market news
+export const MARKET_NEWS: MarketNews[] = [
+  {
+    id: "news-1",
+    title: "NGX ASI Rises 0.36% as Banking Stocks Rally",
+    summary: "The Nigerian Exchange All-Share Index closed higher as banking stocks led gains.",
+    date: "2023-06-05",
+    source: "Afrimetrics Research",
+    market: "NGX",
+  },
+  {
+    id: "news-2",
+    title: "GSE Composite Index Declines on Profit Taking",
+    summary: "Ghana's main index fell as investors took profits after recent gains.",
+    date: "2023-06-05",
+    source: "Afrimetrics Research",
+    market: "GSE",
+  },
+  {
+    id: "news-3",
+    title: "JSE ALSI Hits New Record High",
+    summary: "South Africa's All-Share Index reached a new record high led by mining stocks.",
+    date: "2023-06-05",
+    source: "Afrimetrics Research",
+    market: "JSE",
+  },
+];
