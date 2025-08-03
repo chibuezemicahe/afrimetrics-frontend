@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Stock {
+  id            String         @id @default(uuid())
+  symbol        String
+  name          String
+  price         Float
+  change        Float
+  percentChange Float?
+  volume        Int
+  value         Float
+  trades        Int
+  sector        String
+  market        String
+  logo          String?
+  source        String?        // Optional, for tracking scraper source
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  history       StockHistory[]
+
+  @@unique([symbol, market])
+}
+
+model StockHistory {
+  id            String   @id @default(uuid())
+  stockId       String
+  date          DateTime
+  price         Float
+  change        Float
+  percentChange Float?
+  volume        Int
+  value         Float
+  trades        Int
+  source        String   // Required, tracks origin (e.g., "apt-securities", "gti-research")
+  sector        String?  // Optional sector field, can be null for existing records
+  stock         Stock    @relation(fields: [stockId], references: [id])
+
+  @@index([stockId])
+  @@index([date])
+}
+
+// Add after your existing models
+
+model MarketIndex {
+  id            String               @id @default(uuid())
+  symbol        String
+  name          String
+  description   String?
+  value         Float
+  change        Float
+  percentChange Float
+  market        String
+  sector        String?              // Nullable to handle existing records
+  category      String?              // New field - nullable to handle existing records
+  provider      String?              // New field - nullable to handle existing records
+  is_active     Boolean?             // New field - nullable to handle existing records
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  history       MarketIndexHistory[]
+
+  @@unique([symbol, market])
+}
+
+model MarketIndexHistory {
+  id            String      @id @default(uuid())
+  indexId       String
+  date          DateTime
+  value         Float
+  change        Float
+  percentChange Float
+  sector        String?     // Nullable to handle existing records
+  category      String?     // New field - nullable to handle existing records
+  provider      String?     // New field - nullable to handle existing records
+  is_active     Boolean?    // New field - nullable to handle existing records
+  index         MarketIndex @relation(fields: [indexId], references: [id])
+
+  @@index([indexId])
+  @@index([date])
+}

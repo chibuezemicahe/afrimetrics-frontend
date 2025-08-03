@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Stock {
+  id            String         @id @default(uuid())
+  symbol        String
+  name          String
+  price         Float
+  change        Float
+  percentChange Float?
+  volume        Int
+  value         Float
+  trades        BigInt         // Changed from Int to BigInt
+  sector        String
+  market        String
+  logo          String?
+  source        String?
+  is_active     Boolean @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  history       StockHistory[]
+
+  @@unique([symbol, market])
+}
+
+model StockHistory {
+  id            String   @id @default(uuid())
+  stockId       String
+  date          DateTime
+  price         Float
+  change        Float
+  percentChange Float?
+  volume        Int
+  value         Float
+  trades        BigInt   // Changed from Int to BigInt
+  source        String
+  sector        String?
+  stock         Stock    @relation(fields: [stockId], references: [id])
+
+  @@index([stockId])
+  @@index([date])
+}
+
+model MarketIndex {
+  id            String               @id @default(uuid())
+  symbol        String
+  name          String
+  description   String?
+  value         Float
+  change        Float
+  percentChange Float
+  market        String
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  sector        String?
+  category      String?
+  provider      String?
+  is_active     Boolean?             @default(true)
+  history       MarketIndexHistory[]
+
+  @@unique([symbol, market])
+}
+
+model MarketIndexHistory {
+  id            String      @id @default(uuid())
+  indexId       String
+  date          DateTime
+  value         Float
+  change        Float
+  percentChange Float
+  sector        String?
+  source        String?
+  updated_at    DateTime?   @db.DateTime(0)
+  index         MarketIndex @relation(fields: [indexId], references: [id])
+
+  @@index([indexId])
+  @@index([date])
+}

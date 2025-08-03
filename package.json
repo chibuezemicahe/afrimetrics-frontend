@@ -6,16 +6,24 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:seed-ngx": "ts-node scripts/test-ngx-seed.ts",
+    "test:seed-ngx-indices": "ts-node scripts/test-ngx-indices-seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^6.10.1",
     "@types/d3": "^7.4.3",
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "chart.js": "^4.4.9",
+    "cheerio": "^1.1.0",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
+    "fetch": "^1.1.0",
     "framer-motion": "^12.18.1",
+    "lucide-react": "^0.515.0",
     "next": "15.3.3",
+    "node-fetch": "^3.3.2",
+    "prisma": "^6.10.1",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
@@ -25,11 +33,13 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/node-fetch": "^2.6.12",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3"
   }
 }

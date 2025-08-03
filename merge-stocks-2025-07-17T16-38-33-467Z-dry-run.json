@@ -1,0 +1,162 @@
+[
+  {
+    "symbol": "ALEX",
+    "keptId": "df509789-17c0-4f78-bd4e-12d341463e10",
+    "keptHistoryCount": 433,
+    "mergedIds": [
+      "945f6dc1-02c8-4d4f-ba1c-9cbec2856798"
+    ],
+    "movedRecordsCount": 2,
+    "success": true
+  },
+  {
+    "symbol": "BAPLC",
+    "keptId": "09ec03d6-1d2e-4bbe-80ea-a9118fe016ec",
+    "keptHistoryCount": 1,
+    "mergedIds": [
+      "604c1e21-906a-4f7b-96ce-0d3b93a5f8a3"
+    ],
+    "movedRecordsCount": 1,
+    "success": true
+  },
+  {
+    "symbol": "CHAMPION",
+    "keptId": "dcdf49a9-d306-4eb6-9bf9-f577ed761d91",
+    "keptHistoryCount": 1253,
+    "mergedIds": [
+      "0fb47a05-9d12-4e25-a56e-f703ea84b5e7"
+    ],
+    "movedRecordsCount": 1,
+    "success": true
+  },
+  {
+    "symbol": "ETRANZACT",
+    "keptId": "857e2ba4-7416-4ff3-92e1-21dee36866de",
+    "keptHistoryCount": 967,
+    "mergedIds": [
+      "6fdfb8b6-5c3e-43fa-923e-e0799e799dda"
+    ],
+    "movedRecordsCount": 1,
+    "success": true
+  },
+  {
+    "symbol": "HONYFLOUR",
+    "keptId": "a2eadbf8-8ccc-44a7-8519-cfcda7d2b05e",
+    "keptHistoryCount": 1273,
+    "mergedIds": [
+      "07d4c526-768f-4e59-ae6c-b570d7658ce0"
+    ],
+    "movedRecordsCount": 1,
+    "success": true
+  },
+  {
+    "symbol": "INFINITY",
+    "keptId": "953016a1-1a63-40ba-9d0d-0c93289356b3",
+    "keptHistoryCount": 363,
+    "mergedIds": [
+      "54786628-81de-4d64-8c8e-f68a5947e8e2"
+    ],
+    "movedRecordsCount": 1,
+    "success": true
+  },
+  {
+    "symbol": "MBENEFIT",
+    "keptId": "908b3530-d3db-4a97-a73d-533b1d3bfdfe",
+    "keptHistoryCount": 1055,
+    "mergedIds": [
+      "51941205-4e64-49e2-bf27-885c0129e25b"
+    ],
+    "movedRecordsCount": 1,
+    "success": true
+  },
+  {
+    "symbol": "NOTORE",
+    "keptId": "8a72ad3f-e7a2-4c86-881c-d7c1530aa0b2",
+    "keptHistoryCount": 273,
+    "mergedIds": [
+      "5df7ce59-a189-467d-80bc-a0dc6f2a81b1"
+    ],
+    "movedRecordsCount": 2,
+    "success": true
+  },
+  {
+    "symbol": "NPFMCRFBK",
+    "keptId": "b560d6dc-4675-43c5-a313-cd63391f2719",
+    "keptHistoryCount": 1208,
+    "mergedIds": [
+      "2e2b1f6c-6a05-437b-90fc-fcc27c2f620f"
+    ],
+    "movedRecordsCount": 1,
+    "success": true
+  },
+  {
+    "symbol": "OANDO",
+    "keptId": "aef997df-dc2a-49f5-a7a5-2179c7fd1414",
+    "keptHistoryCount": 1266,
+    "mergedIds": [
+      "04e30e34-bebd-4ea8-899e-91657818d980"
+    ],
+    "movedRecordsCount": 1,
+    "success": true
+  },
+  {
+    "symbol": "PHARMDEKO",
+    "keptId": "619b56b0-dbe4-462c-95c5-446afeddd5f5",
+    "keptHistoryCount": 85,
+    "mergedIds": [
+      "8099f1d7-6bd3-43fc-aa67-546da71da707"
+    ],
+    "movedRecordsCount": 2,
+    "success": true
+  },
+  {
+    "symbol": "PREMPAINTS",
+    "keptId": "43f2cd07-875d-4fe6-967b-e587723afb96",
+    "keptHistoryCount": 41,
+    "mergedIds": [
+      "cafa24ee-9c59-4f9e-b0ac-336feba262cc"
+    ],
+    "movedRecordsCount": 2,
+    "success": true
+  },
+  {
+    "symbol": "PRESTIGE",
+    "keptId": "7d61d772-37bb-4f08-96fc-8823eac812d8",
+    "keptHistoryCount": 1140,
+    "mergedIds": [
+      "51b7cdcd-7ad0-4f29-9a1a-4459391a5b6b"
+    ],
+    "movedRecordsCount": 1,
+    "success": true
+  },
+  {
+    "symbol": "REGALINS",
+    "keptId": "978f71c7-bf59-4137-968b-c2d23ca58d6d",
+    "keptHistoryCount": 1143,
+    "mergedIds": [
+      "114e25fd-781a-47c5-a770-fb0f9d630959"
+    ],
+    "movedRecordsCount": 1,
+    "success": true
+  },
+  {
+    "symbol": "UNITYBNK",
+    "keptId": "7bda5936-b25b-4bda-993e-8c0cfea38e8b",
+    "keptHistoryCount": 417,
+    "mergedIds": [
+      "320f4e7a-a063-4a0d-b608-c535e59f2b79"
+    ],
+    "movedRecordsCount": 2,
+    "success": true
+  },
+  {
+    "symbol": "UPDC",
+    "keptId": "e413ab63-c85a-476b-b2a0-961ba63f6787",
+    "keptHistoryCount": 1264,
+    "mergedIds": [
+      "78541dd2-adcd-4c2c-ae23-1fc80edff799"
+    ],
+    "movedRecordsCount": 328,
+    "success": true
+  }
+]

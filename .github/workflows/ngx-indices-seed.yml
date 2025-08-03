@@ -1,0 +1,40 @@
+name: NGX Indices Data Seed
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+  
+  # Scheduled trigger - 5:15 PM WAT (West Africa Time, UTC+1) Monday-Friday
+  # Running 15 minutes after the stock data to ensure we don't overwhelm the API
+  schedule:
+    - cron: '15 16 * * 1-5'  # 16:15 UTC = 17:15 WAT
+
+jobs:
+  seed-ngx-indices:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Generate Prisma client
+        run: npx prisma generate
+        
+      - name: Seed NGX indices data
+        run: |
+          curl -X POST ${{ secrets.API_URL }}/api/seed/ngx-indices \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.API_KEY }}" \
+            --fail
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
