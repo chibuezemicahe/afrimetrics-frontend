@@ -130,8 +130,30 @@ const CustomBubbleChart: React.FC<CustomBubbleChartProps> = ({
   };
 
   // Calculate tile size based on value (similar to market cap in Finviz)
-  const getTileSize = (stock: StockData, maxValue: number, minValue: number): number => {
-    const normalizedValue = (stock.value - minValue) / (maxValue - minValue);
+  // Calculate tile size based on the selected performance filter
+  const getTileSize = (stock: StockData, maxValue: number, minValue: number, filter: PerformanceFilter): number => {
+    let metricValue: number;
+    
+    // Use the appropriate metric based on the selected filter
+    switch (filter) {
+      case 'gainers':
+      case 'losers':
+        metricValue = Math.abs(stock.percentChange || 0);
+        break;
+      case 'active':
+        metricValue = stock.trades;
+        break;
+      case 'traded':
+        metricValue = stock.value;
+        break;
+      case 'unchanged':
+        metricValue = Math.abs(stock.percentChange || 0);
+        break;
+      default:
+        metricValue = stock.value;
+    }
+    
+    const normalizedValue = (metricValue - minValue) / (maxValue - minValue);
     const minSize = 80;
     const maxSize = 200;
     return minSize + (normalizedValue * (maxSize - minSize));
@@ -183,16 +205,34 @@ const CustomBubbleChart: React.FC<CustomBubbleChartProps> = ({
     };
   }, [height]);
 
-  // Calculate grid layout
+  // Calculate grid layout with filter-aware sizing
   const calculateGridLayout = (filteredData: StockData[]): StockWithSize[][] => {
     if (dimensions.width === 0) return [];
     
-    const maxValue = Math.max(...filteredData.map(stock => stock.value));
-    const minValue = Math.min(...filteredData.map(stock => stock.value));
+    // Get min/max values based on the selected filter
+    let values: number[];
+    switch (selectedPerformance) {
+      case 'gainers':
+      case 'losers':
+      case 'unchanged':
+        values = filteredData.map(stock => Math.abs(stock.percentChange || 0));
+        break;
+      case 'active':
+        values = filteredData.map(stock => stock.trades);
+        break;
+      case 'traded':
+        values = filteredData.map(stock => stock.value);
+        break;
+      default:
+        values = filteredData.map(stock => stock.value);
+    }
+    
+    const maxValue = Math.max(...values);
+    const minValue = Math.min(...values);
     
     const tiles: StockWithSize[] = filteredData.map(stock => ({
       ...stock,
-      size: getTileSize(stock, maxValue, minValue)
+      size: getTileSize(stock, maxValue, minValue, selectedPerformance)
     }));
     
     // Simple grid packing algorithm
@@ -200,7 +240,7 @@ const CustomBubbleChart: React.FC<CustomBubbleChartProps> = ({
     let currentRow: StockWithSize[] = [];
     let currentRowWidth = 0;
     const padding = 4;
-    const availableWidth = dimensions.width - 40; // Account for container padding
+    const availableWidth = dimensions.width - 40;
     
     tiles.forEach(tile => {
       if (currentRowWidth + tile.size + padding > availableWidth && currentRow.length > 0) {
@@ -401,7 +441,63 @@ const CustomBubbleChart: React.FC<CustomBubbleChartProps> = ({
                       onMouseEnter={() => setHoveredStock(stock.id || '')}
                       onMouseLeave={() => setHoveredStock(null)}
                     >
-                      {/* ... existing stock tile content ... */}
+                      {/* Stock Logo */}
+                      {stock.logo && (
+                        <img 
+                          src={stock.logo} 
+                          alt={`${stock.name} logo`}
+                          className="w-6 h-6 mb-1 object-contain"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      )}
+                      
+                      {/* Stock Symbol */}
+                      <div className="text-white text-xs font-bold mb-1 text-center leading-tight">
+                        {stock.symbol}
+                      </div>
+                      
+                      {/* Stock Name (truncated) */}
+                      <div className="text-white text-[10px] opacity-80 text-center leading-tight mb-1 px-1" 
+                           style={{ 
+                             overflow: 'hidden',
+                             textOverflow: 'ellipsis',
+                             whiteSpace: 'nowrap',
+                             maxWidth: '100%'
+                           }}>
+                        {stock.name}
+                      </div>
+                      
+                      {/* Percentage Change */}
+                      <div className={`text-xs font-semibold ${
+                        (stock.percentChange || 0) >= 0 ? 'text-green-300' : 'text-red-300'
+                      }`}>
+                        {(stock.percentChange || 0) >= 0 ? '+' : ''}{(stock.percentChange || 0).toFixed(2)}%
+                      </div>
+                      
+                      {/* Tooltip on hover */}
+                      {isHovered && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-black/90 text-white text-xs rounded-lg p-3 whitespace-nowrap z-20 shadow-lg border border-gray-600"
+                        >
+                          <div className="font-semibold">{stock.name} ({stock.symbol})</div>
+                          <div className="text-gray-300">Price: ₦{stock.price?.toFixed(2) || 'N/A'}</div>
+                          <div className={`${
+                            (stock.percentChange || 0) >= 0 ? 'text-green-400' : 'text-red-400'
+                          }`}>
+                            Change: {(stock.percentChange || 0) >= 0 ? '+' : ''}{(stock.percentChange || 0).toFixed(2)}%
+                          </div>
+                          {stock.volume && <div className="text-gray-300">Volume: {stock.volume.toLocaleString()}</div>}
+                          {stock.sector && <div className="text-gray-300">Sector: {stock.sector}</div>}
+                          
+                          {/* Tooltip arrow */}
+                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black/90"></div>
+                        </motion.div>
+                      )}
                     </motion.div>
                   );
                 })}

@@ -30,7 +30,9 @@ export async function GET(request: NextRequest) {
         volume: true,
         value: true,
         trades: true,
-        sector: true
+        sector: true,
+        market: true,  // Added missing field
+        logo: true     // Added missing field
       }
     });
 
