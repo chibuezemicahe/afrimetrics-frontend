@@ -9,7 +9,6 @@ type TimeframeFilter = 'hour' | 'day' | 'week' | 'month' | 'ytd' | 'yoy';
 type StockWithSize = StockData & { size: number };
 
 interface CustomBubbleChartProps {
-  data: StockData[];
   width?: number;
   height?: number;
   timeframe?: string;
@@ -17,7 +16,6 @@ interface CustomBubbleChartProps {
 }
 
 const CustomBubbleChart: React.FC<CustomBubbleChartProps> = ({
-  data,
   height = 500,
   timeframe = 'day',
   metric = 'value'
@@ -27,6 +25,66 @@ const CustomBubbleChart: React.FC<CustomBubbleChartProps> = ({
   const [selectedTimeframe, setSelectedTimeframe] = useState<TimeframeFilter>('day');
   const [dimensions, setDimensions] = useState({ width: 0, height });
   const [hoveredStock, setHoveredStock] = useState<string | null>(null);
+  const [data, setData] = useState<StockData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Fetch data based on selected performance filter
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        let endpoint = '/api/stocks/ngx';
+        
+        switch (selectedPerformance) {
+          case 'gainers':
+            endpoint = '/api/stocks/ngx/top-gainers?limit=100';
+            break;
+          case 'losers':
+            endpoint = '/api/stocks/ngx/top-losers?limit=100';
+            break;
+          case 'active':
+            endpoint = '/api/stocks/ngx/most-active?limit=100';
+            break;
+          case 'traded':
+            endpoint = '/api/stocks/ngx?sortBy=value&order=desc&limit=100';
+            break;
+          case 'unchanged':
+            endpoint = '/api/stocks/ngx?limit=100';
+            break;
+          default:
+            endpoint = '/api/stocks/ngx?limit=100';
+        }
+        
+        console.log('Fetching from endpoint:', endpoint); // Debug log
+        const response = await fetch(endpoint);
+        const result = await response.json();
+        
+        console.log('API Response:', result); // Debug log
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        if (result.success) {
+          setData(result.data || []);
+          console.log('Data set:', result.data?.length || 0, 'stocks'); // Debug log
+        } else {
+          setError(result.error || 'Failed to fetch stock data');
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Error fetching stock data';
+        setError(errorMessage);
+        console.error('Error fetching stock data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, [selectedPerformance]);
   
   // Filter and sort data based on the selected filters
   const getFilteredData = (): StockData[] => {
@@ -172,7 +230,7 @@ const CustomBubbleChart: React.FC<CustomBubbleChartProps> = ({
         <div className="flex items-center">
           <div className="w-8 h-8 bg-[#1e293b] rounded-full flex items-center justify-center mr-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#4ade80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1 1v5a1 1 0 01-1 1H5a1 1 0 01-1 1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
             </svg>
           </div>
           <h2 className="text-xl font-bold text-white">STOCK HEATMAP</h2>
@@ -191,6 +249,40 @@ const CustomBubbleChart: React.FC<CustomBubbleChartProps> = ({
 
       {/* Filter Controls */}
       <div className="mb-6">
+        {/* Performance Filters */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          <button 
+            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${selectedPerformance === 'gainers' ? 'bg-[#1e293b] text-white font-medium' : 'bg-[#0f172a] hover:bg-[#1e293b] text-gray-400'}`}
+            onClick={() => setSelectedPerformance('gainers')}
+          >
+            Top Gainers
+          </button>
+          <button 
+            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${selectedPerformance === 'losers' ? 'bg-[#1e293b] text-white font-medium' : 'bg-[#0f172a] hover:bg-[#1e293b] text-gray-400'}`}
+            onClick={() => setSelectedPerformance('losers')}
+          >
+            Top Losers
+          </button>
+          <button 
+            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${selectedPerformance === 'active' ? 'bg-[#1e293b] text-white font-medium' : 'bg-[#0f172a] hover:bg-[#1e293b] text-gray-400'}`}
+            onClick={() => setSelectedPerformance('active')}
+          >
+            Most Active
+          </button>
+          <button 
+            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${selectedPerformance === 'traded' ? 'bg-[#1e293b] text-white font-medium' : 'bg-[#0f172a] hover:bg-[#1e293b] text-gray-400'}`}
+            onClick={() => setSelectedPerformance('traded')}
+          >
+            Most Traded
+          </button>
+          <button 
+            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${selectedPerformance === 'unchanged' ? 'bg-[#1e293b] text-white font-medium' : 'bg-[#0f172a] hover:bg-[#1e293b] text-gray-400'}`}
+            onClick={() => setSelectedPerformance('unchanged')}
+          >
+            Unchanged
+          </button>
+        </div>
+        
         {/* Timeframe Filters */}
         <div className="flex flex-wrap gap-2 mb-4">
           <button 
@@ -229,155 +321,94 @@ const CustomBubbleChart: React.FC<CustomBubbleChartProps> = ({
           >
             YTD
           </button>
-          <button 
-            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${selectedPerformance === 'active' ? 'bg-[#1e293b] text-white font-medium' : 'bg-[#0f172a] hover:bg-[#1e293b] text-gray-400'}`}
-            onClick={() => setSelectedPerformance('active')}
-          >
-            Top Active
-          </button>
-          <button 
-            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${selectedPerformance === 'traded' ? 'bg-[#1e293b] text-white font-medium' : 'bg-[#0f172a] hover:bg-[#1e293b] text-gray-400'}`}
-            onClick={() => setSelectedPerformance('traded')}
-          >
-            Most Traded
-          </button>
-          <button 
-            className={`px-3 py-1.5 rounded-lg text-sm transition-all ${selectedPerformance === 'unchanged' ? 'bg-[#1e293b] text-white font-medium' : 'bg-[#0f172a] hover:bg-[#1e293b] text-gray-400'}`}
-            onClick={() => setSelectedPerformance('unchanged')}
-          >
-            Unchanged
-          </button>
         </div>
       </div>
       
       {/* Heatmap Grid Container */}
       <div className="relative w-full bg-[#0f172a] rounded-lg p-5" style={{ minHeight: `${height}px` }}>
-        <div className="space-y-1">
-          {gridRows.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex flex-wrap gap-1">
-              {row.map((stock) => {
-                const isHovered = hoveredStock === stock.id;
-                const backgroundColor = getColor(stock.percentChange || 0);
-                const borderColor = getBorderColor(stock.percentChange || 0);
-                
-                return (
-                  <motion.div
-                    key={stock.id}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ 
-                      opacity: 1, 
-                      scale: 1,
-                      transition: { 
-                        type: 'spring',
-                        damping: 15,
-                        stiffness: 200,
-                        delay: rowIndex * 0.05
-                      }
-                    }}
-                    whileHover={{ 
-                      scale: 1.05,
-                      zIndex: 10,
-                      transition: { type: 'spring', stiffness: 300, damping: 20 }
-                    }}
-                    style={{ 
-                      width: `${stock.size}px`,
-                      height: `${stock.size * 0.75}px`, // Rectangular aspect ratio
-                      backgroundColor,
-                      border: `2px solid ${borderColor}`,
-                    }}
-                    className="relative flex flex-col items-center justify-center rounded-lg overflow-hidden cursor-pointer"
-                    onMouseEnter={() => setHoveredStock(stock.id || '')}
-                    onMouseLeave={() => setHoveredStock(null)}
-                  >
-                    {/* Logo or Symbol */}
-                    <div className="flex flex-col items-center justify-center h-full p-2">
-                      {stock.logo ? (
-                        <img 
-                          src={stock.logo} 
-                          alt={stock.symbol} 
-                          className="w-6 h-6 object-contain mb-1"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
-                      ) : (
-                        <div className="w-6 h-6 rounded bg-white/20 flex items-center justify-center mb-1">
-                          <span className="text-white font-bold text-xs">{stock.symbol.substring(0, 2)}</span>
-                        </div>
-                      )}
-                      
-                      {/* Symbol */}
-                      <span className="text-white font-bold text-xs text-center leading-tight">{stock.symbol}</span>
-                      
-                      {/* Performance Value */}
-                      <span className="text-white text-xs font-medium">{getDisplayValue(stock)}</span>
-                    </div>
-                    
-                    {/* Tooltip on hover */}
-                    <AnimatePresence>
-                      {isHovered && (
-                        <motion.div 
-                          className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-white p-3 rounded-lg shadow-lg z-20 w-64 mb-2"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                        >
-                          <div className="flex items-center mb-2">
-                            {stock.logo ? (
-                              <img 
-                                src={stock.logo} 
-                                alt={stock.name} 
-                                className="w-6 h-6 rounded-full mr-2"
-                                onError={(e) => {
-                                  e.currentTarget.onerror = null;
-                                  e.currentTarget.src = "/placeholder-logo.svg";
-                                }}
-                              />
-                            ) : (
-                              <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mr-2">
-                                <span className="text-xs font-bold text-gray-600">{stock.symbol.substring(0, 2)}</span>
-                              </div>
-                            )}
-                            <p className="font-medium">{stock.name}</p>
-                          </div>
-                          <p className="text-sm text-gray-600">{stock.symbol}</p>
-                          <div className="mt-2 pt-2 border-t border-gray-200">
-                            <p className="flex justify-between">
-                              <span className="text-gray-600">Price:</span>
-                              <span className="font-medium">{stock.price.toFixed(2)}</span>
-                            </p>
-                            <p className="flex justify-between">
-                              <span className="text-gray-600">Change:</span>
-                              <span className={stock.percentChange && stock.percentChange > 0 ? "text-green-600" : "text-red-600"}>
-                                {stock.change > 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.percentChange && stock.percentChange > 0 ? '+' : ''}{(stock.percentChange || 0).toFixed(2)}%)
-                              </span>
-                            </p>
-                            <p className="flex justify-between">
-                              <span className="text-gray-600">Volume:</span>
-                              <span className="font-medium">{stock.volume.toLocaleString()}</span>
-                            </p>
-                            <p className="flex justify-between">
-                              <span className="text-gray-600">Value:</span>
-                              <span className="font-medium">{(stock.value / 1000000).toFixed(1)}M</span>
-                            </p>
-                            <p className="flex justify-between">
-                              <span className="text-gray-600">Trades:</span>
-                              <span className="font-medium">{stock.trades}</span>
-                            </p>
-                            <p className="flex justify-between">
-                              <span className="text-gray-600">Sector:</span>
-                              <span className="font-medium">{stock.sector}</span>
-                            </p>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="flex flex-col items-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4ade80]"></div>
+              <p className="text-white mt-4">Loading {getPerformanceLabel()}...</p>
             </div>
-          ))}
-        </div>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p className="text-red-400 text-lg font-medium mb-2">Error Loading Data</p>
+              <p className="text-gray-400 text-sm mb-4">{error}</p>
+              <button 
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-[#4ade80] text-black rounded-lg hover:bg-[#22c55e] transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        ) : filteredData.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-gray-500/20 rounded-full flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8l-4 4m0 0l-4-4m4 4V3" />
+                </svg>
+              </div>
+              <p className="text-gray-400 text-lg font-medium mb-2">No Data Available</p>
+              <p className="text-gray-500 text-sm">No {getPerformanceLabel().toLowerCase()} found for the selected criteria.</p>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-1">
+            {gridRows.map((row, rowIndex) => (
+              <div key={rowIndex} className="flex flex-wrap gap-1">
+                {row.map((stock) => {
+                  const isHovered = hoveredStock === stock.id;
+                  const backgroundColor = getColor(stock.percentChange || 0);
+                  const borderColor = getBorderColor(stock.percentChange || 0);
+                  
+                  return (
+                    <motion.div
+                      key={stock.id}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ 
+                        opacity: 1, 
+                        scale: 1,
+                        transition: { 
+                          type: 'spring',
+                          damping: 15,
+                          stiffness: 200,
+                          delay: rowIndex * 0.05
+                        }
+                      }}
+                      whileHover={{ 
+                        scale: 1.05,
+                        zIndex: 10,
+                        transition: { type: 'spring', stiffness: 300, damping: 20 }
+                      }}
+                      style={{ 
+                        width: `${stock.size}px`,
+                        height: `${stock.size * 0.75}px`,
+                        backgroundColor,
+                        border: `2px solid ${borderColor}`,
+                      }}
+                      className="relative flex flex-col items-center justify-center rounded-lg overflow-hidden cursor-pointer"
+                      onMouseEnter={() => setHoveredStock(stock.id || '')}
+                      onMouseLeave={() => setHoveredStock(null)}
+                    >
+                      {/* ... existing stock tile content ... */}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

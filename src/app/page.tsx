@@ -15,7 +15,8 @@ import Card from "@/components/ui/Card";
 import CustomBubbleChart from '../components/charts/CustomBubbleChart';
 import { MarketType } from "@/types/stock";
 import { TimeFilter } from "../context/MarketContext";
-import { COMPLETE_NGX_STOCKS } from "../constants/ngx-extended";
+// Remove the import of COMPLETE_NGX_STOCKS
+// import { COMPLETE_NGX_STOCKS } from "../constants/ngx-extended";
 
 function HomeContent() {
   const { selectedMarket, getMarketIndices, timeFilter, setTimeFilter, stockFilter } = useMarket();
@@ -279,7 +280,7 @@ function HomeContent() {
         </div>
       </div>
       
-      {/* Stock Bubbles - Moved here for NGX, after Market Snapshots */}
+      {/* Stock Bubbles - Updated to not pass data prop */}
       {isNGXSelected && (
         <div className="mb-6">
           <div className="flex items-center mb-3">
@@ -289,8 +290,7 @@ function HomeContent() {
             <h2 className="text-lg font-semibold text-[var(--text-secondary)]">Stock Bubbles</h2>
           </div>
           <CustomBubbleChart 
-            data={COMPLETE_NGX_STOCKS} 
-            height={600} // Increased height to accommodate more bubbles
+            height={600}
             timeframe={timeFilter} 
             metric={stockFilter}
           />
